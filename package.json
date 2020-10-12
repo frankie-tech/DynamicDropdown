@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/excelerondesign/DynamicDropdown#readme",
   "devDependencies": {
-    "microbundle": "^0.12.4"
+    "microbundle": "^0.12.4",
+    "prettier": "^2.1.2"
   }
 }

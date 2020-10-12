@@ -1,4 +1,4 @@
-class DynamicCityDropdown {
+export default class DynamicCityDropdown {
 	constructor(config) {
 		this.form = config.form;
 		this.file = config.file;
@@ -31,7 +31,7 @@ class DynamicCityDropdown {
 				if (data.type === 'START') {
 					cache.type = data.fileType;
 					return fetch(data.file)
-						.then(async (resp) => {
+						.then(async resp => {
 							const output = {};
 							const body =
 								data.fileType == 'json'
@@ -76,7 +76,7 @@ class DynamicCityDropdown {
 
 							return output;
 						})
-						.then((output) => (cache.states = output))
+						.then(output => (cache.states = output))
 						.then(() => (cache.active = true))
 						.catch(console.error)
 						.then(() => self.postMessage({ cacheStatus: true }));
@@ -96,7 +96,7 @@ class DynamicCityDropdown {
 
 				cache.templates[data.state_id] = cache.states[data.state_id]
 					.map(
-						(cityName) =>
+						cityName =>
 							`<option value="${cityName}" data-city-option>${cityName}</option>`,
 					)
 					.join('');

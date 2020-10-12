@@ -7,14 +7,20 @@
 	"source": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "microbundle watch --raw --name DynamicDropdown",
-		"bundle": "microbundle --name DynamicDropdown"
+		"clean": "rm -r dist/",
+		"bundle:dev": "microbundle watch --compress false --raw true --name DynamicDropdown",
+		"bundle:build": "microbundle --name DynamicDropdown -f modern,umd",
+		"dev": "npm-run-all clean bundle:dev",
+		"build": "npm-run-all clean bundle:build"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/excelerondesign/DynamicDropdown.git"
 	},
-	"author": "",
+	"author": {
+		"name": "frankie",
+		"url": "https://github.com/frankie-tech"
+	},
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/excelerondesign/DynamicDropdown/issues"

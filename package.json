@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/excelerondesign/DynamicDropdown/issues"
   },
-  "homepage": "https://github.com/excelerondesign/DynamicDropdown#readme"
+  "homepage": "https://github.com/excelerondesign/DynamicDropdown#readme",
+  "devDependencies": {
+    "microbundle": "^0.12.4"
+  }
 }

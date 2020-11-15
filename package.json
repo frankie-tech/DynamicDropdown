@@ -7,7 +7,8 @@
 	"source": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"clean": "rm -r dist/",
+		"serve": "python -m SimpleHTTPServer",
+		"clean": "rm -rf dist/",
 		"bundle:dev": "microbundle watch --compress false --raw true --name DynamicDropdown",
 		"bundle:build": "microbundle --name DynamicDropdown -f modern,umd",
 		"dev": "npm-run-all clean bundle:dev",

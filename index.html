@@ -26,12 +26,20 @@
 			body {
 				display: flex;
 				flex-direction: column;
+				margin: unset;
+				padding: unset;
 			}
 			body > * {
 				width: 100%;
 				max-width: min(65vw, 992px);
 				margin: 0 auto;
 				padding: 15px;
+			}
+			header {
+				padding: 1rem;
+			}
+			h2 {
+				margin: unset;
 			}
 			main {
 				flex: 1;
@@ -61,8 +69,11 @@
 	<body>
 		<header>
 			<h2>
-				DynamicDropdown: Select option generator for US Cities based on
-				State selection
+				DynamicDropdown: <br />
+				<small>
+					Select option generator for US Cities based on State
+					selection
+				</small>
 			</h2>
 		</header>
 		<main>

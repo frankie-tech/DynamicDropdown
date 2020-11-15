@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Test DynamicDropdown</title>
+		<style>
+			html,
+			body {
+				height: 100%;
+				background-color: #dfdfdf;
+			}
+			body {
+				display: flex;
+				flex-direction: column;
+			}
+			main {
+				flex: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h2>
+				DynamicDropdown: Select option generator for US Cities based on
+				State selection
+			</h2>
+		</header>
+		<main>
+			<form action="/" method="post" id="dynamicDropdownForm">
+				<fieldset>
+					<div class="form-group">
+						<select
+							name="states"
+							id="dynamicDropdownStates"
+							data-state
+						></select>
+						<select
+							name="cities"
+							id="dynamicDropdownCities"
+							data-city
+						></select>
+					</div>
+				</fieldset>
+			</form>
+			<output id="citiesFetchedOutput"></output>
+		</main>
+	</body>
+</html>

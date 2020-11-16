@@ -160,19 +160,17 @@
 			</form>
 			<output id="citiesFetchedOutput"></output>
 		</main>
-		<script src="dist/dynamicdropdown.umd.js"></script>
-		<script>
-			window.onload = () => {
-				const dropdownConfig = {
-					form: document.querySelector('#dynamicDropdownForm'),
-					container: '.form-group',
-					file: 'http://localhost:8000/static/db_cities.csv',
-				};
+		<script type="module" src="./dist/dynamicdropdown.modern.js"></script>
+		<script type="module">
+			import DynamicDropdown from './dist/dynamicdropdown.modern.js';
 
-				const dropdown = new DynamicDropdown(dropdownConfig).init();
-				// console.log(dropdown);
-				window.dropdown = dropdown;
+			const dropdownConfig = {
+				form: document.querySelector('#dynamicDropdownForm'),
+				container: '.form-group',
+				file: 'http://localhost:8000/static/db_cities.csv',
 			};
+
+			const dropdown = new DynamicDropdown(dropdownConfig).init();
 		</script>
 	</body>
 </html>

@@ -2,15 +2,14 @@
 	"name": "dynamicdropdown",
 	"version": "0.1.0",
 	"description": "A dropdown that generates a list of US Cities dynamically",
-	"main": "dist/dynamicdropdown.umd.js",
-	"umd:main": "dist/dynamicdropdown.umd.js",
+	"modern": "dist/dynamicdropdown.js",
 	"source": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"serve": "python -m SimpleHTTPServer",
 		"clean": "rm -rf dist/",
-		"bundle:dev": "microbundle watch --compress false --raw true --name DynamicDropdown",
-		"bundle:build": "microbundle --name DynamicDropdown -f modern,umd",
+		"bundle:dev": "microbundle watch --compress false --raw true -f modern",
+		"bundle:build": "microbundle -f modern",
 		"dev": "npm-run-all clean bundle:dev",
 		"build": "npm-run-all clean bundle:build"
 	},
@@ -41,5 +40,9 @@
 	},
 	"mangle": {
 		"regex": "^_"
-	}
+	},
+	"browserslist": [
+		"Edge 15",
+		"supports es6-generators"
+	]
 }

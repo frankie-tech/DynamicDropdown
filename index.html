@@ -170,7 +170,9 @@
 				file: 'http://localhost:8000/static/db_cities.csv',
 			};
 
-			const dropdown = new DynamicDropdown(dropdownConfig).init();
+			const dropdown = new DynamicDropdown(dropdownConfig);
+			dropdown.init();
+			window.dropdown = dropdown;
 		</script>
 	</body>
 </html>

@@ -9,8 +9,6 @@ export default class DynamicCityDropdown {
 		this.worker = new Worker(
 			URL.createObjectURL(new Blob([`${this.defineWorker()}`])),
 		);
-		// this.worker.addEventListener('message', console.log);
-		// console.log(this.worker);
 	}
 
 	defineWorker() {
@@ -27,17 +25,21 @@ export default class DynamicCityDropdown {
 			(async ({ data }) => {
 
 				if (!generator) {
+					// console.log('no generator');
 					cache.states = await fetchIt(data);
 					generator = templateGen();
-					generator.next(data.state_id)
+					generator.next();
+
 					postMessage([{ type: 'RESOLVED' }, '']);
 					return;
 				}
 
+				// console.log('something else');
 				// turn long string into a transferable to transfer close to instantly
 				const tpl = generator.next(data.state_id).value;
 
 				const buffer = str2ab(tpl);
+				// console.log(buffer, tpl);
 				// [ status: {}, data: [] ]
 				return postMessage([{ type: 'TEMPLATE' }, buffer], [buffer]);
 
@@ -46,7 +48,8 @@ export default class DynamicCityDropdown {
 					let output = {};
 					const resp = await fetch(data.file),
 						body = await resp[bodyType]();
-					/*
+
+					/* // TODO: Rebuild JSON handler
 					if (cache.type === 'json') {
 						for
 					}
@@ -104,6 +107,7 @@ export default class DynamicCityDropdown {
 					for (; i < l; i++) bufView[i] = str.charCodeAt(i);
 					return buf;
 				}
+
 				// console.log('data', data);
 				/*
 				if (data.type === 'START') {
@@ -201,7 +205,7 @@ export default class DynamicCityDropdown {
 
 	render(buffer, parent) {
 		const str = this.ab2str(buffer);
-		console.log(str);
+
 		let tpl = document.createElement('template');
 		tpl.innerHTML = str;
 		requestAnimationFrame(() => {
@@ -247,16 +251,17 @@ export default class DynamicCityDropdown {
 		*/
 		this.worker.postMessage({
 			file: this.file,
-			fileType: this.type,
+			fileType: this.type
 		});
 
-		this.worker.onmessage = e => {
+		this.worker.addEventListener('message', e => {
 			const [status, buffer] = e.data;
 			if (status.type !== 'TEMPLATE') return;
 			this.render(buffer, this.city);
-		}
+		}, true);
 
-		this.form.addEventListener('change', e => !e.target.matches('[data-state]') && this.worker.postMessage({ type: 'CHANGE', state_id: e.target.value }), true);
+		const post = data => this.worker.postMessage(data);
+		this.form.addEventListener('change', e => e.target.closest('[data-state]') && post({ state_id: e.target.value }), true);
 
 	}
 }

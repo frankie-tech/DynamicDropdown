@@ -30,7 +30,7 @@ export default class DynamicCityDropdown {
 					cache.states = await fetchIt(data);
 					generator = templateGen();
 					generator.next(data.state_id)
-					postMessage([{ cacheStatus: 'resolved' }, '']);
+					postMessage([{ type: 'RESOLVED', cacheStatus: 'resolved' }, '']);
 					return;
 				}
 
@@ -46,6 +46,7 @@ export default class DynamicCityDropdown {
 
 				// turn long string into a transferable to transfer close to instantly
 				const tpl = generator.next(data.state_id).value;
+
 				const buffer = str2ab(tpl);
 				// [ status: {}, data: [] ]
 				return postMessage([{ type: 'TEMPLATE' }, buffer], [buffer]);
@@ -246,24 +247,21 @@ export default class DynamicCityDropdown {
 		});
 		*/
 		this.worker.postMessage({
+			type: 'INIT',
 			file: this.file,
 			fileType: this.type,
 		});
 
 		this.worker.onmessage = e => {
-			console.log(e);
 			const [status, buffer] = e.data;
 			if (status.type !== 'TEMPLATE') return;
 			this.render(buffer, this.city);
 		}
-	}
 
-	set states([state, data]) {
-		this.cache.states[state] = data;
-		this.cache.templates[state] = data.map(city => `<option value="${city}" data-city-option>${city}</option>`).join('');
-	}
+		this.form.onchange = e => {
+			if (!e.target.matches('[data-state]')) return;
 
-	get states() {
-		return this.cache.templates;
+			this.worker.postMessage({ type: 'CHANGE', state_id: e.target.value });
+		}
 	}
 }

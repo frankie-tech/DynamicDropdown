@@ -30,18 +30,8 @@ export default class DynamicCityDropdown {
 					cache.states = await fetchIt(data);
 					generator = templateGen();
 					generator.next(data.state_id)
-					postMessage([{ type: 'RESOLVED', cacheStatus: 'resolved' }, '']);
+					postMessage([{ type: 'RESOLVED' }, '']);
 					return;
-				}
-
-				function str2ab(str) {
-					var buf = new ArrayBuffer(str.length * 2), // 2 bytes for each char
-						bufView = new Uint16Array(buf),
-						i = 0,
-						l = str.length;
-
-					for (; i < l; i++) bufView[i] = str.charCodeAt(i);
-					return buf;
 				}
 
 				// turn long string into a transferable to transfer close to instantly
@@ -73,14 +63,13 @@ export default class DynamicCityDropdown {
 							continue;
 						}
 
-						// expects the first item in the CSV col to be the city name, and the second to be the state id (i.e. FL, IA, CA, etc...)
-
+						// expects the first item in the CSV col to be the city name, 
+						// and the second to be the state id (i.e. FL, IA, CA, etc...)
 						const [city, id] = rows[i].split(',');
 
 						if (id === undefined) continue;
 
 						if (output[id] === undefined) {
-							// console.log(id, output);
 							output[id] = [];
 						}
 
@@ -104,6 +93,16 @@ export default class DynamicCityDropdown {
 							cache.templates[request] = states[request].map(city => `<option value="${city}" data-city-option>${city}</option>`).join('');
 						response = cache.templates[request];
 					}
+				}
+
+				function str2ab(str) {
+					var buf = new ArrayBuffer(str.length * 2), // 2 bytes for each char
+						bufView = new Uint16Array(buf),
+						i = 0,
+						l = str.length;
+
+					for (; i < l; i++) bufView[i] = str.charCodeAt(i);
+					return buf;
 				}
 				// console.log('data', data);
 				/*
@@ -247,7 +246,6 @@ export default class DynamicCityDropdown {
 		});
 		*/
 		this.worker.postMessage({
-			type: 'INIT',
 			file: this.file,
 			fileType: this.type,
 		});
@@ -258,10 +256,7 @@ export default class DynamicCityDropdown {
 			this.render(buffer, this.city);
 		}
 
-		this.form.onchange = e => {
-			if (!e.target.matches('[data-state]')) return;
+		this.form.addEventListener('change', e => !e.target.matches('[data-state]') && this.worker.postMessage({ type: 'CHANGE', state_id: e.target.value }), true);
 
-			this.worker.postMessage({ type: 'CHANGE', state_id: e.target.value });
-		}
 	}
 }

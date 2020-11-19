@@ -1,8 +1,15 @@
 export default class DynamicCityDropdown {
 	constructor(config) {
-		this.form = config.elements.form;
-		this.city = config.elements.city;
-		this.state = config.elements.state;
+		const selectors = Object.assign({
+			form: '[data-dynamic-cities]',
+			state: '[data-state]',
+			city: '[data-city]'
+		}, config.elements);
+
+		this.selectors = selectors;
+		this.form = document.querySelector(selectors.form);
+		this.city = document.querySelector(selectors.city);
+		this.state = document.querySelector(selectors.state);
 		// this.container = config.container;
 		if (config.file === undefined) throw Error('Missing file path');
 		this.file = config.file;
@@ -281,7 +288,9 @@ export default class DynamicCityDropdown {
 		}, true);
 
 		const post = data => this.worker.postMessage(data);
-		this.form.addEventListener('change', e => e.target.closest('[data-state]') && post({ state_id: e.target.value }), true);
+		const stateSelector = this.selectors.state;
+
+		this.form.addEventListener('change', e => e.target.closest(stateSelector) && post({ state_id: e.target.value }), true);
 
 	}
 }

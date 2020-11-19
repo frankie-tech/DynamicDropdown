@@ -158,7 +158,7 @@
 					</div>
 				</fieldset>
 				<fieldset>
-					<div class="form-group">
+					<div class="json-form-group">
 						<label for="states"
 							>Select a state
 							<select
@@ -243,15 +243,33 @@
 		<script type="module">
 			import DynamicDropdown from './dist/dynamicdropdown.modern.js';
 
+			const elements = {
+				form: '#dynamicDropdownForm',
+				state: '.form-group [data-state]',
+				city: '.form-group [data-city]',
+			};
+
 			const dropdownConfig = {
-				form: document.querySelector('#dynamicDropdownForm'),
+				elements,
 				container: '.form-group',
 				file: 'http://localhost:8000/static/db_cities.csv',
 			};
 
 			const dropdown = new DynamicDropdown(dropdownConfig);
 			dropdown.init();
+			const jsonElements = {
+				form: '#dynamicDropdownForm',
+				state: '.json-form-group [data-state]',
+				city: '.json-form-group [data-city]',
+			};
+			const jsonDropdown = new DynamicDropdown({
+				elements: jsonElements,
+				container: '.json-form-group',
+				file: 'http://localhost:8000/static/db_cities.json',
+			});
+			jsonDropdown.init();
 			window.dropdown = dropdown;
+			window.jsonDropdown = jsonDropdown;
 		</script>
 	</body>
 </html>

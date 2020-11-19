@@ -44,7 +44,6 @@ export default class DynamicCityDropdown {
 				return postMessage([{ type: 'TEMPLATE' }, buffer], [buffer]);
 
 				async function fetchIt(data, bodyType = 'text') {
-					cache.type = data.fileType;
 					let output = {};
 					const resp = await fetch(data.file),
 						body = await resp[bodyType]();
@@ -54,6 +53,23 @@ export default class DynamicCityDropdown {
 						for
 					}
 					*/
+					if (data.fileType === 'json') {
+						for (let [state, cities] of Object.entries(
+							body,
+						)) {
+							if (output[state] === undefined)
+								output[state] = [];
+							let i = 0,
+								l = cities.length;
+
+							for (; l > i++;)
+								output[state].push(cities[i].city);
+
+							output[state].sort();
+						}
+
+						return output;
+					}
 
 					// else handle csv file
 					const rows = body.replace(/"/g, '').split('\n'),

@@ -64,12 +64,25 @@ export default class DynamicCityDropdown {
 						for
 					}
 					*/
+
+
 					if (type === 'json') {
+						let i = 0,
+							l = body.length;
+						while (l < i) {
+							let [state, city] = body[i];
+							if (output[state] === undefined) output[state] = [];
+
+							output[state].push(city);
+							if (body[++i].state !== state) output[state].sort();
+						}
+						/*
 						for (let [state, cities] of Object.entries(
 							body,
 						)) {
 							if (output[state] === undefined)
 								output[state] = [];
+							console.log(state);
 							let i = 0,
 								l = cities.length;
 
@@ -78,7 +91,7 @@ export default class DynamicCityDropdown {
 
 							output[state].sort();
 						}
-
+						*/
 						return output;
 					}
 
@@ -116,9 +129,10 @@ export default class DynamicCityDropdown {
 				function* templateGen() {
 					let states = cache.states,
 						response;
+					//console.log(states);
 					while (true) {
 						let request = yield response;
-
+						console.log(states, states[request]);
 						if (cache.templates[request] === undefined || cache.templates[request].length === 0)
 							cache.templates[request] = states[request].map(city => `<option value="${city}" data-city-option>${city}</option>`).join('');
 						response = cache.templates[request];

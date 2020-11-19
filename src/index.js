@@ -1,11 +1,12 @@
 export default class DynamicCityDropdown {
 	constructor(config) {
-		this.form = config.form;
+		this.form = config.elements.form;
+		this.city = config.elements.city;
+		this.state = config.elements.state;
+		// this.container = config.container;
+		if (config.file === undefined) throw Error('Missing file path');
 		this.file = config.file;
-		this.container = config.container;
-		this.city = this.form.querySelector('[data-city]');
-		if (this.file === undefined) throw Error('Missing file path');
-		this.type = config.type || 'csv';
+		// this.type = config.type || 'csv';
 		this.worker = new Worker(
 			URL.createObjectURL(new Blob([`${this.defineWorker()}`])),
 		);

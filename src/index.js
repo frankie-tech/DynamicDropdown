@@ -69,6 +69,8 @@ export default class DynamicCityDropdown {
 					if (type === 'json') {
 						let i = 0,
 							l = body.length;
+
+						// TODO: For some reason this isn't giving an output to the cache
 						while (l < i) {
 							let [state, city] = body[i];
 							if (output[state] === undefined) output[state] = [];

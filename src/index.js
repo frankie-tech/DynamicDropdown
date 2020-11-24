@@ -20,30 +20,32 @@ export default class DynamicCityDropdown {
 	}
 
 	defineWorker() {
-		const cache = {
+		const reqCache = {
 			active: false,
 			states: {},
 			templates: {},
 		};
-		// Respone [ object, status, data ]
+		// Response [ object, status, data ]
 		const script =
-			'let generator;const cache=' +
-			JSON.stringify(cache) +
+			'let generator;const reqCache=' +
+			JSON.stringify(reqCache) +
 			';onmessage=' +
 			(async ({ data }) => {
 
 				if (!generator) {
 					// console.log('no generator');
-					cache.states = await fetchIt(data);
+					reqCache.states = await fetchIt(data);
 					generator = templateGen();
 					generator.next();
 
+					// console.log('generated', generator);
 					postMessage([{ type: 'RESOLVED' }, '']);
 					return;
 				}
 
 				// console.log('something else');
 				// turn long string into a transferable to transfer close to instantly
+				// console.log(data.state_id);
 				const tpl = generator.next(data.state_id).value;
 
 				const buffer = str2ab(tpl);
@@ -65,19 +67,20 @@ export default class DynamicCityDropdown {
 					}
 					*/
 
-
 					if (type === 'json') {
 						let i = 0,
 							l = body.length;
-
+						// console.log({ type, item: body[i], l });
 						// TODO: For some reason this isn't giving an output to the cache
-						while (l < i) {
-							let [state, city] = body[i];
-							if (output[state] === undefined) output[state] = [];
-
-							output[state].push(city);
-							if (body[++i].state !== state) output[state].sort();
+						while (l > i) {
+							let { state_id, city } = body[i];
+							if (state_id in output === false) {
+								output[state_id] = [];
+							}
+							output[state_id].push(city);
+							if (body[++i] !== undefined && body[i].state_id !== state_id) output[state_id].sort();
 						}
+						// console.log(output);
 						/*
 						for (let [state, cities] of Object.entries(
 							body,
@@ -129,15 +132,16 @@ export default class DynamicCityDropdown {
 				}
 
 				function* templateGen() {
-					let states = cache.states,
+
+					let states = reqCache.states,
 						response;
-					//console.log(states);
+
 					while (true) {
 						let request = yield response;
-						console.log(states, states[request]);
-						if (cache.templates[request] === undefined || cache.templates[request].length === 0)
-							cache.templates[request] = states[request].map(city => `<option value="${city}" data-city-option>${city}</option>`).join('');
-						response = cache.templates[request];
+						// console.log(reqCache, states, request);
+						if (reqCache.templates[request] === undefined || reqCache.templates[request].length === 0)
+							reqCache.templates[request] = states[request].map(city => `<option value="${city}" data-city-option>${city}</option>`).join('');
+						response = reqCache.templates[request];
 					}
 				}
 
@@ -255,7 +259,7 @@ export default class DynamicCityDropdown {
 			while (parent.firstChild) parent.firstChild.remove();
 			parent.append(...tpl.content.children);
 			tpl = null;
-		})
+		});
 	}
 
 	ab2str(buf) {

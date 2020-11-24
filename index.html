@@ -251,7 +251,6 @@
 
 			const dropdownConfig = {
 				elements,
-				container: '.form-group',
 				file: 'http://localhost:8000/static/db_cities.csv',
 			};
 
@@ -264,7 +263,6 @@
 			};
 			const jsonDropdown = new DynamicDropdown({
 				elements: jsonElements,
-				container: '.json-form-group',
 				file: 'http://localhost:8000/static/db_cities.json',
 			});
 			jsonDropdown.init();

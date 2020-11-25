@@ -6,7 +6,7 @@
 	"source": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"serve": "python -m SimpleHTTPServer",
+		"serve": "python server.py",
 		"clean": "rm -rf dist/",
 		"bundle:dev": "microbundle watch --compress false --raw true -f modern",
 		"bundle:build": "microbundle -f modern",
